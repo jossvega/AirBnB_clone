@@ -29,6 +29,15 @@ class BaseModel:
                     # This happens because __class__ is not mandatory in output
                     continue
 
+                setattr(self, key, value)
+        else:
+            # Generate a random UUID
+            self.id = str(uuid.uuid4())
+            # assign with the current datetime when an instance is created
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            # if it’s a new instance add a call to the method new(self) on stge
+            models.storage.new(self)
 
     def __str__(self):
         """Overriding the __str__ method that returns a custom
