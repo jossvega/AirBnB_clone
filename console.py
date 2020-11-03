@@ -10,9 +10,11 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
-class HBNBCommand(cmd.Cmd):
-    prompt = '(hbnb) ' 
 
+class HBNBCommand(cmd.Cmd):
+    prompt = '(hbnb) '
+    classes = ["BaseModel", "City", "State",
+               "User", "Place", "Review", "Amenity"]
 
     def do_create(self, args):
         """
@@ -21,14 +23,15 @@ class HBNBCommand(cmd.Cmd):
         """
         if not args:
             print("** class name missing **")
-            return
+            return None
         tokens = args.split(" ")
-        if tokens[0] in self.classes:
+        elif tokens[0] in self.classes:
             new = eval("{}()".format(tokens[0]))
             new.save()
             print("{}".format(new.id))
         else:
             print("** class doesn't exist **")
+            return None
 
     def do_show(self, args):
         """ show string representation of an instance"""
@@ -37,7 +40,7 @@ class HBNBCommand(cmd.Cmd):
         try:
             if len(tokens) == 0:
                 print("** class name missing **")
-                return
+                return None
             if tokens[0] in self.classes:
                 if len(tokens) > 1:
                     key = tokens[0] + "." + tokens[1]
@@ -60,14 +63,14 @@ class HBNBCommand(cmd.Cmd):
         """
         if not args:
             print("** class name missing **")
-            return
+            return None
         tokens = args.split(" ")
         objects = storage.all()
 
         if tokens[0] in self.classes:
             if len(tokens) < 2:
                 print("** instance id missing **")
-                return
+                return None
             name = tokens[0] + "." + tokens[1]
             if name not in objects:
                 print("** no instance found **")
@@ -79,6 +82,7 @@ class HBNBCommand(cmd.Cmd):
                     storage.save()
         else:
             print("** class doesn't exist **")
+            return None
 
     def do_all(self, args):
         """
@@ -144,7 +148,8 @@ class HBNBCommand(cmd.Cmd):
         """
         EOF command exits out of the command interpreter
         """
-        quit()
+        print()
+        return True
 
     def do_help(self, args):
         """
@@ -156,7 +161,8 @@ class HBNBCommand(cmd.Cmd):
         """
         Returns back to the prompt
         """
-        return   
+        pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
