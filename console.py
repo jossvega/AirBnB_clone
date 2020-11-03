@@ -10,11 +10,12 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+classes = ["BaseModel", "City", "State", "User", "Place", "Review", "Amenity"]
+
 
 class HBNBCommand(cmd.Cmd):
+
     prompt = '(hbnb) '
-    classes = ["BaseModel", "City", "State",
-               "User", "Place", "Review", "Amenity"]
 
     def do_create(self, args):
         """
@@ -148,7 +149,6 @@ class HBNBCommand(cmd.Cmd):
         """
         EOF command exits out of the command interpreter
         """
-        print()
         return True
 
     def emptyline(self):
