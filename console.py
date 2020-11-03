@@ -143,6 +143,7 @@ class HBNBCommand(cmd.Cmd):
         Quit command exits out of the command interpreter
         """
         quit()
+        return True
 
     def do_EOF(self, args):
         """
@@ -150,12 +151,6 @@ class HBNBCommand(cmd.Cmd):
         """
         print()
         return True
-
-    def do_help(self, args):
-        """
-        Command lists all help details for each command
-        """
-        cmd.Cmd.do_help(self, args)
 
     def emptyline(self):
         """
