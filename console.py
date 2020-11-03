@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return None
         tokens = args.split(" ")
-        elif tokens[0] in self.classes:
+        if tokens[0] in self.classes:
             new = eval("{}()".format(tokens[0]))
             new.save()
             print("{}".format(new.id))
@@ -91,30 +91,38 @@ class HBNBCommand(cmd.Cmd):
         """
         objects = storage.all()
         instances = []
-        if not args:
-            for name in objects:
-                instances.append(objects[name])
-            print(instances)
-            return
         tokens = args.split(" ")
-        if tokens[0] in self.classes:
-            for name in objects:
-                if name[0:len(tokens[0])] == tokens[0]:
-                    instances.append(objects[name])
+        if len(tokens) < 1:
+            for value in objects.name():
+                instances.append(name.__str__())
             print(instances)
-        else:
+        elif (tokens[0] not in self.classes):
             print("** class doesn't exist **")
+        else:
+            for key, name in objects.items():
+                if tokens[0] in key:
+                    instances.append(name.__str__())
+                else:
+                    return
+            print(instances)
 
     def do_update(self, args):
         """
         Update an instance based on the class name and id by adding
         or updating attribute (save the change into the JSON file).
         """
-        if not args:
+        tokens = args.split()
+        if len(tokens) < 1:
             print("** class name missing **")
-            return
-        tokens = args.split(" ")
-        objects = storage.all()
+        elif (tokens[0] not in self.classes):
+            print("** class doesn't exist **")
+        elif len(tokens) < 2:
+            print("** instance id missing **")
+        else:
+            objects = storage.all()
+            name = tokens[0] + "." + tokens[1]
+            if (name not in objects):
+                print("** no instance found **")
         if tokens[0] in self.classes:
             if len(tokens) < 2:
                 print("** instance id missing **")
@@ -122,21 +130,13 @@ class HBNBCommand(cmd.Cmd):
             name = tokens[0] + "." + tokens[1]
             if name not in objects:
                 print("** no instance found **")
+            elif len(tokens) < 3:
+                print("** attribute name missing **")
+            elif len(tokens) < 4:
+                print("** value missing **")
             else:
-                obj = objects[name]
-                untouchable = ["id", "created_at", "updated_at"]
-                if obj:
-                    token = args.split(" ")
-                    if len(token) < 3:
-                        print("** attribute name missing **")
-                    elif len(token) < 4:
-                        print("** value missing **")
-                    elif token[2] not in untouchable:
-                        obj.__dict__[token[2]] = token[3]
-                        obj.updated_at = datetime.now()
-                        storage.save()
-        else:
-            print("** class doesn't exist **")
+                setattr(objects[name], tokens[2], tokens[3])
+                storage.save()
 
     def do_quit(self, args):
         """
