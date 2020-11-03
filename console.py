@@ -142,7 +142,6 @@ class HBNBCommand(cmd.Cmd):
         """
         Quit command exits out of the command interpreter
         """
-        quit()
         return True
 
     def do_EOF(self, args):
