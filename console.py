@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import cmd
+import re
+from shlex import split
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -138,6 +140,21 @@ class HBNBCommand(cmd.Cmd):
             else:
                 setattr(objects[name], tokens[2], tokens[3])
                 storage.save()
+
+     def do_count(self, args):
+        """
+        Counts number of instances of a class
+        """
+        objects = storage.all()
+        instances = []
+        count = 0
+        if args in self.classes:
+            for name in objects:
+                if name[0:len(args)] == args:
+                    count += 1
+            print(count)
+        else:
+            print("** class doesn't exist **")
 
     def do_quit(self, args):
         """
