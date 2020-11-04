@@ -28,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return None
         tokens = args.split(" ")
-        if tokens[0] in self.classes:
+        if tokens[0] in classes:
             new = eval("{}()".format(tokens[0]))
             new.save()
             print("{}".format(new.id))
@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
             if len(tokens) == 0:
                 print("** class name missing **")
                 return None
-            if tokens[0] in self.classes:
+            if tokens[0] in classes:
                 if len(tokens) > 1:
                     key = tokens[0] + "." + tokens[1]
                     if key in objects:
@@ -70,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         tokens = args.split(" ")
         objects = storage.all()
 
-        if tokens[0] in self.classes:
+        if tokens[0] in classes:
             if len(tokens) < 2:
                 print("** instance id missing **")
                 return None
@@ -93,20 +93,15 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name
         """
         objects = storage.all()
-        instances = []
         tokens = args.split(" ")
-        if len(tokens) < 1:
-            for value in objects.name():
-                instances.append(name.__str__())
+        if not args:
+            instances = [str(obj) for key, obj in objects.items()]
             print(instances)
-        elif (tokens[0] not in self.classes):
-            print("** class doesn't exist **")
+        elif (tokens[0] not in classes):
+            print("{}".format("** class doesn't exist **"))
         else:
-            for key, name in objects.items():
-                if tokens[0] in key:
-                    instances.append(name.__str__())
-                else:
-                    return
+            instances = [str(obj) for key, obj in objects.items()
+                         if type(obj).__name__ == tokens[0]]
             print(instances)
 
     def do_update(self, args):
@@ -117,7 +112,7 @@ class HBNBCommand(cmd.Cmd):
         tokens = args.split()
         if len(tokens) < 1:
             print("** class name missing **")
-        elif (tokens[0] not in self.classes):
+        elif (tokens[0] not in classes):
             print("** class doesn't exist **")
         elif len(tokens) < 2:
             print("** instance id missing **")
@@ -126,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
             name = tokens[0] + "." + tokens[1]
             if (name not in objects):
                 print("** no instance found **")
-        if tokens[0] in self.classes:
+        if tokens[0] in classes:
             if len(tokens) < 2:
                 print("** instance id missing **")
                 return
@@ -141,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
                 setattr(objects[name], tokens[2], tokens[3])
                 storage.save()
 
-     def do_count(self, args):
+    def do_count(self, args):
         """
         Counts number of instances of a class
         """
