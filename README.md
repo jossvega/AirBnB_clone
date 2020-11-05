@@ -153,4 +153,4 @@ $
 
 Jocelyn Vega  - [Twitter: @jossvega103](https://twitter.com/jossvega103)
 
-Juan Fernando Granada - [Twitter: @juangraram](https://twitter.com/juangraram)
+Juan Granada - [Twitter: @juangraram](https://twitter.com/juangraram)
