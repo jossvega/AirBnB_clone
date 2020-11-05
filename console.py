@@ -148,6 +148,17 @@ class HBNBCommand(cmd.Cmd):
             s = s + ' ' + t1[2]
         return cmd.Cmd.precmd(self, s)
 
+    def do_count(self, line):
+        """
+        Counts number of instances of a class
+        """
+        all_objs = storage.all()
+        count = 0
+        for name in all_objs:
+            if name[0:len(line)] == line:
+                count += 1
+        print(count)
+
     def emptyline(self):
         """Method called when an empty line is entered in response
         to the prompt"""
