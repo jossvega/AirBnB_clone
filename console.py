@@ -22,13 +22,7 @@ class HBNBCommand(cmd.Cmd):
         """Create a new instance of a class and prints the id"""
         if len(args) == 0:
             print("** class name missing **")
-            return None
-        tokens = args.split(" ")
-        if tokens[0] in classes:
-            new = eval("{}()".format(tokens[0]))
-            new.save()
-            print("{}".format(new.id))
-        else:
+        elif args not in classes:
             print("** class doesn't exist **")
         else:
             for i in classes:
