@@ -4,8 +4,12 @@ module testing amenity
 """
 import unittest
 import pep8
-from models.amenity import Amenity
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.state import State
+from models.review import Review
 
 
 class TestAmenity(unittest.TestCase):
@@ -16,30 +20,19 @@ class TestAmenity(unittest.TestCase):
         """
         style = pep8.StyleGuide(quiet=True)
         p = style.check_files(['models/amenity.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        self.assertEqual(p.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
-    def test_subclass(self):
-        self.assertTrue(issubclass(self.amen.__class__, BaseModel), True)
+    def test_class(self):
+        amenity1 = Amenity()
+        self.assertEqual(amenity1.__class__.__name__, "Amenity")
 
-    def test_functions(self):
-        self.assertIsNotNone(Amenity.__doc__)
+    def test_father(self):
+        amenity1 = Amenity()
+        self.assertTrue(issubclass(amenity1.__class__, BaseModel))
 
-    def test_attr(self):
-        self.assertTrue('id' in self.amen.__dict__)
-        self.assertTrue('created_at' in self.amen.__dict__)
-        self.assertTrue('updated_at' in self.amen.__dict__)
-        self.assertTrue('name' in self.amen.__dict__)
-
-    def test_strings(self):
-        self.assertEqual(type(self.amen.name), str)
-
-    def test_save(self):
-        self.amen.save()
-        self.assertNotEqual(self.amen.created_at, self.amen.updated_at)
-
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.amen), True)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_amenity(self):
+        """Test attributes of Class Amenity"""
+        my_amenity = Amenity()
+        my_amenity.name = "Wi-Fi"
+        self.assertEqual(my_amenity.name, 'Wi-Fi')

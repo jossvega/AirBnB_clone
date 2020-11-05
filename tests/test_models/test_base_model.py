@@ -11,7 +11,6 @@ class TEST_base(unittest.TestCase):
     """this will test the base model class"""
 
     @classmethod
-    """setup for the test"""
     def setUpClass(cls):
         cls.basel = BaseModel()
         cls.basel.name = "Jocelyn"

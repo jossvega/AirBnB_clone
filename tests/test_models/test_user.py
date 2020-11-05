@@ -1,43 +1,36 @@
 #!/usr/bin/python3
-
+"""Test User"""
 import unittest
 import pep8
-from models.user import User
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.state import State
+from models.review import Review
+from models.user import User
 
 
-class TestUser(unittest.TestCase):
+class Testuser(unittest.TestCase):
 
-    def test_style_check(self):
+    def test_pep8_conformance_user(self):
+        """Test that we conform to PEP8."""
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['models/user.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_User(self):
         """
-        Tests pep8 style
+        Test attributes of Class Use
         """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/user.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        my_user = User()
+        my_user.first_name = "Juan"
+        my_user.last_name = "Granada"
+        my_user.email = '2020@holbertonschool.com'
+        self.assertEqual(my_user.first_name, "Juan")
+        self.assertEqual(my_user.last_name, "Granada")
+        self.assertEqual(my_user.email, '2020@holbertonschool.com')
 
     def test_subclass(self):
-        self.assertTrue(issubclass(self.usr.__class__, BaseModel), True)
-
-    def test_functions(self):
         self.assertIsNotNone(User.__doc__)
-
-    def test_attr(self):
-        self.assertTrue('email' in self.usr.__dict__)
-        self.assertTrue('id' in self.usr.__dict__)
-        self.assertTrue('created_at' in self.usr.__dict__)
-        self.assertTrue('updated_at' in self.usr.__dict__)
-        self.assertTrue('password' in self.usr.__dict__)
-        self.assertTrue('first_name' in self.usr.__dict__)
-        self.assertTrue('last_name' in self.usr.__dict__)
-
-     def test_save(self):
-        self.usr.save()
-        self.assertNotEqual(self.usr.created_at, self.usr.updated_at)
-
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.usr), True)
-
-
-if __name__ == "__main__":
-    unittest.main()
