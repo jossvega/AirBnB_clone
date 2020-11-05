@@ -109,32 +109,34 @@ class HBNBCommand(cmd.Cmd):
         Update an instance based on the class name and id by adding
         or updating attribute (save the change into the JSON file).
         """
+        objects = storage.all()
         tokens = args.split()
-        if len(tokens) < 1:
-            print("** class name missing **")
-        elif (tokens[0] not in classes):
-            print("** class doesn't exist **")
-        elif len(tokens) < 2:
-            print("** instance id missing **")
+        if len(tokens) == 0:
+            print("{}".format("** class name missing **"))
+        elif tokens[0] not in self.dict_classes:
+            print("{}".format("** class doesn't exist **"))
+        elif len(tokens) == 1:
+            print("{}".format("** instance id missing **"))
+        # key = "{}.{}".format(tokens[0], tokens[1])
+        elif ".".join(tokens[:2]) not in objects:
+            print("{}".format("** no instance found **"))
+        elif len(tokens) == 2:
+            print("{}".format("** atribute name missing **"))
+        elif len(tokens) < 4:
+            print("{}".format("** value missing **"))
         else:
-            objects = storage.all()
-            name = tokens[0] + "." + tokens[1]
-            if (name not in objects):
-                print("** no instance found **")
-        if tokens[0] in classes:
-            if len(tokens) < 2:
-                print("** instance id missing **")
-                return
-            name = tokens[0] + "." + tokens[1]
-            if name not in objects:
-                print("** no instance found **")
-            elif len(tokens) < 3:
-                print("** attribute name missing **")
-            elif len(tokens) < 4:
-                print("** value missing **")
-            else:
-                setattr(objects[name], tokens[2], tokens[3])
-                storage.save()
+            key = "{}.{}".format(tokens[0], tokens[1])
+            attribute = tokens[2]
+            value = tokens[3].strip(' "')
+            if value.isdigit():
+                value = int(value)
+            elif '.' in value:
+                float1 = value.split('.')
+                if float1[0].isdigit() and float1[1].isdigit():
+                    value = float(value)
+            dic_obj = objects[key].__dict__
+            dic_obj[attribute] = value
+            storage.save()
 
     def do_count(self, args):
         """

@@ -5,8 +5,14 @@ places
 """
 import unittest
 import pep8
-from models.place import Place
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.state import State
+from models.review import Review
+from models.user import User
+
 
 class TestPlace(unittest.TestCase):
 
@@ -16,32 +22,51 @@ class TestPlace(unittest.TestCase):
         """
         style = pep8.StyleGuide(quiet=True)
         p = style.check_files(['models/place.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        self.assertEqual(p.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
-    def test_subclass(self):
-        self.assertTrue(issubclass(self.place.__class__, BaseModel), True)
+    def test_class(self):
+        place1 = Place()
+        self.assertEqual(place1.__class__.__name__, "Place")
 
-    def test_has_attr(self):
-        self.assertTrue('id' in self.place.__dict__)
-        self.assertTrue('city_id' in self.place.__dict__)
-        self.assertTrue('user_id' in self.place.__dict__)
-        self.assertTrue('name' in self.place.__dict__)
-        self.assertTrue('description' in self.place.__dict__)
-        self.assertTrue('number_rooms' in self.place.__dict__)
-        self.assertTrue('number_bathrooms' in self.place.__dict__)
-        self.assertTrue('max_guest' in self.place.__dict__)
-        self.assertTrue('price_by_night' in self.place.__dict__)
-        self.assertTrue('latitude' in self.place.__dict__)
-        self.assertTrue('longitude' in self.place.__dict__)
-        self.assertTrue('amenity_ids' in self.place.__dict__)
+    def test_father(self):
+        place1 = Place()
+        self.assertTrue(issubclass(place1.__class__, BaseModel))
 
-    def test_save(self):
-        self.place.save()
-        self.assertNotEqual(self.place.created_at, self.place.updated_at)
-
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.place), True)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_place(self):
+        """
+        Test attributes of Class Place
+        """
+        my_amenity = Amenity()
+        my_city = City()
+        my_user = User()
+        my_place = Place()
+        my_place.city_id = my_city.id
+        my_place.user_id = my_user.id
+        my_place.name = 'Coworking'
+        my_place.description = 'description'
+        my_place.number_rooms = 4
+        my_place.number_bathrooms = 2
+        my_place.max_guest = 4
+        my_place.price_by_night = 200
+        my_place.latitude = 25.0342808
+        my_place.longitude = -77.3962784
+        my_place.amenity_ids = str(my_amenity.id)
+        self.assertEqual(my_place.city_id, my_city.id)
+        self.assertEqual(my_place.user_id, my_user.id)
+        self.assertEqual(my_place.name, 'Coworking')
+        self.assertEqual(my_place.description, 'description')
+        self.assertEqual(my_place.number_rooms, 4)
+        self.assertTrue(type(my_place.number_rooms), int)
+        self.assertEqual(my_place.number_bathrooms, 2)
+        self.assertTrue(type(my_place.number_bathrooms), int)
+        self.assertEqual(my_place.max_guest, 4)
+        self.assertTrue(type(my_place.max_guest), int)
+        self.assertEqual(my_place.price_by_night, 200)
+        self.assertTrue(type(my_place.price_by_night), int)
+        self.assertEqual(my_place.latitude, 25.0342808)
+        self.assertTrue(type(my_place.latitude), float)
+        self.assertEqual(my_place.longitude, -77.3962784)
+        self.assertTrue(type(my_place.longitude), float)
+        self.assertEqual(my_place.amenity_ids, str(my_amenity.id))
+        self.assertTrue(type(my_place.amenity_ids), str)
